@@ -17,6 +17,7 @@ export const getBySiteSettingName = (name: string) => {
                 .blockField("id")
                 .blockField("siteId")
                 .blockField("recordTypeId")
+                .blockField("preQuestion")
         );
     });
 };

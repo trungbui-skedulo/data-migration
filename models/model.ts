@@ -63,6 +63,8 @@ export class Model {
     blockField(key: string) {
         const field = key as keyof this;
 
+        if (!this[field]) return this;
+
         this[field] = `{!${this[field]}}` as any;
 
         return this;

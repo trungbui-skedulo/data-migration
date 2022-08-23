@@ -25,5 +25,19 @@ export const query = (soql: string) => {
         })
         .then((res) => {
             return res.data;
+        })
+        .catch((error) => {
+            console.log(error.response.data);
+        });
+};
+
+export const insert = (sobjectName: string, body: any) => {
+    return getApiInstance()
+        .post(`/services/data/v55.0/sobjects/${sobjectName}`, body)
+        .then((res) => {
+            return res.data;
+        })
+        .catch((error) => {
+            console.log(error.response.data);
         });
 };
