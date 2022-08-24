@@ -5,7 +5,7 @@ const getApiInstance = () => {
 
     const instanceUrl = process.env.INSTANCE;
 
-    console.log(instanceUrl);
+    console.log(`Instance: ${instanceUrl}`);
 
     const api = axios.create({
         baseURL: instanceUrl,
@@ -17,6 +17,8 @@ const getApiInstance = () => {
 };
 
 export const query = (soql: string) => {
+    console.log(`Queried: ${soql}`);
+
     return getApiInstance()
         .get("/services/data/v55.0/query", {
             params: {
@@ -32,6 +34,8 @@ export const query = (soql: string) => {
 };
 
 export const insert = (sobjectName: string, body: any) => {
+    console.log(`Inserted: ${sobjectName}`);
+
     return getApiInstance()
         .post(`/services/data/v55.0/sobjects/${sobjectName}`, body)
         .then((res) => {

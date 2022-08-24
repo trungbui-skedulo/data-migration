@@ -1,7 +1,6 @@
 import { Model } from "./model";
 
 export class Question extends Model {
-    id = "";
     // name = "";
     question = "";
     anwser = "";

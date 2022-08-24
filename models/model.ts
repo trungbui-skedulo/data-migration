@@ -1,6 +1,8 @@
 import { QueryBuilder } from "../app/query-builder";
 
 export class Model {
+    id = "";
+
     constructor() {}
 
     static buildQuery() {

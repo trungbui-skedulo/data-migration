@@ -1,7 +1,6 @@
 import { Model } from "./model";
 
 export class RecordType extends Model {
-    id = "";
     name = "";
     sObjectType = "";
 

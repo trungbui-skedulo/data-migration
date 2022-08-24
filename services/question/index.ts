@@ -3,12 +3,8 @@ import * as app from "../../app";
 
 export const getBySiteSettingName = (name: string) => {
     const q = models.Question.buildQuery()
-        .where(
-            `Site_Setting__r.Name = '${name}' AND RecordType.Name = 'Screening'`
-        )
+        .where(`Site_Setting__r.Name = '${name}'`)
         .query();
-
-    console.log(q);
 
     return app.SfApi.query(q).then((data) => {
         return data.records.map((r: unknown) =>
