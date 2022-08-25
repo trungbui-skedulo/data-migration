@@ -1,4 +1,4 @@
-import { Constant, QueryBuilder } from "../app";
+import { Constant, QueryBuilder } from ".";
 
 export class Model {
     id = "";

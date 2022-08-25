@@ -1,4 +1,4 @@
-import { Model } from "./model";
+import { Model } from "../app/model";
 
 export class Question extends Model {
     question = "";

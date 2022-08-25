@@ -52,7 +52,7 @@ const getRecordTypeIdsMap = () => {
         });
 };
 
-const insertQuestion = (q: models.Model) => {
+const insertQuestion = (q: app.Model) => {
     // return new Promise<string>((res, rej) => {
     //     setTimeout(() => {
     //         res(Date.now().toString());

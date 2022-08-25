@@ -1,10 +1,10 @@
+import { Model } from "../../app";
 import { createQueue, createIdsMap } from "./create";
-import * as models from "../../models";
 
 type MigrateParams = {
     queue: ReturnType<typeof createQueue>;
     idsMap: ReturnType<typeof createIdsMap>;
-    createNewIdFn: (mode: models.Model) => Promise<string>;
+    createNewIdFn: (mode: Model) => Promise<string>;
 };
 
 export const migrate = async ({
@@ -17,13 +17,13 @@ export const migrate = async ({
 
     while (queue.length > 0) {
         let failed = false;
-        const q = queue.shift() as models.Model;
+        const q = queue.shift() as Model;
 
         for (const k of Object.keys(q)) {
             const f = k as keyof typeof q;
             if (f == "id") continue;
             if (typeof q[f] !== "string") continue;
-            if (!models.Model.inBlocking(q[f] as unknown as string)) continue;
+            if (!Model.inBlocking(q[f] as unknown as string)) continue;
 
             let idSrc = q[f] as unknown as string;
             idSrc = idSrc.replace("{!", "").replace("}", "");
