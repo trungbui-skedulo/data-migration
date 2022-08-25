@@ -53,11 +53,15 @@ const getRecordTypeIdsMap = () => {
 };
 
 const insertQuestion = (q: models.Model) => {
-    return Promise.resolve(Date.now().toString());
-    // return app.SfApi.insert(
-    //     models.Question.getTableName(),
-    //     models.Question.toSObject(q)
-    // ).then((r) => r.id as string);
+    // return new Promise<string>((res, rej) => {
+    //     setTimeout(() => {
+    //         res(Date.now().toString());
+    //     }, 1000);
+    // });
+    return app.SfApi.insert(
+        models.Question.getTableName(),
+        models.Question.toSObject(q)
+    ).then((r) => r.id as string);
 };
 
 const main = async () => {
@@ -65,7 +69,7 @@ const main = async () => {
 
     const idsMap = await getRecordTypeIdsMap();
 
-    idsMap.set("a2q2S000001zDjYQAU", "a2q2h000000G3arAAC");
+    idsMap.set("a2q2S000001zDjYQAU", "a2q2g000000DGkgAAG");
 
     handlers.queueMigration.migrate({
         queue,

@@ -57,4 +57,6 @@ export const migrate = async ({
             break;
         }
     }
+
+    return idsMap;
 };
