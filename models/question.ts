@@ -1,7 +1,6 @@
 import { Model } from "./model";
 
 export class Question extends Model {
-    // name = "";
     question = "";
     anwser = "";
     desciption = "";
@@ -19,15 +18,14 @@ export class Question extends Model {
     defaultValue = "";
     dataType = "";
 
-    static getTableName() {
+    getTableName() {
         return "sked_Question__c";
     }
 
-    static getApiFields() {
+    getApiFields() {
         const fieldMap = new Map<string, string>();
 
         fieldMap.set("id", "Id");
-        // fieldMap.set("name", "Name");
         fieldMap.set("desciption", "Description__c");
         fieldMap.set("question", "Question__c");
         fieldMap.set("anwser", "Answers__c");

@@ -1,4 +1,4 @@
-import { QueryBuilder } from "../app/query-builder";
+import { Constant, QueryBuilder } from "../app";
 
 export class Model {
     id = "";
@@ -11,36 +11,69 @@ export class Model {
             .from(this.getTableName());
     }
 
-    static fromSObject(_record: any) {
-        const instance = new this();
+    static newInstance() {
+        return new this();
+    }
+
+    fromSObject(_record: any) {
         const km = this.getApiFields();
-        for (const k of Object.keys(instance)) {
-            const f = k as keyof typeof instance;
+        for (const k of Object.keys(this)) {
+            const f = k as keyof typeof this;
             if (km.get(k) == undefined) continue;
-            instance[f] = _record[km.get(k) as string] as never;
+            this[f] = _record[km.get(k) as string] as never;
         }
 
-        return instance;
+        return this;
+    }
+
+    static fromSObject(_record: any) {
+        return this.newInstance().fromSObject(_record);
     }
 
     static toCamelCase(s: string) {
         return s.replace(/[A-Z]/, (v) => `_${v.toLowerCase()}`);
     }
 
-    static getKeys() {
-        const instance = new this();
+    getKeys() {
         const apiFields = this.getApiFields();
 
-        // return Object.keys(instance).map((k) => this.toCamelCase(k));
-        return Object.keys(instance).map((k) => apiFields.get(k) ?? k);
+        return Object.keys(this)
+            .filter((k) => apiFields.get(k))
+            .map((k) => apiFields.get(k) as string);
     }
 
-    static getTableName() {
+    static getKeys() {
+        return this.newInstance().getKeys();
+    }
+
+    getTableName() {
         return "";
     }
 
-    static getApiFields() {
+    static getTableName() {
+        return this.newInstance().getTableName();
+    }
+
+    getApiFields() {
         return new Map<string, string>();
+    }
+
+    static getApiFields() {
+        return this.newInstance().getApiFields();
+    }
+
+    toSObject(instance: any, _force: boolean = false) {
+        const sObjectMap = new Map<string, unknown>();
+        const apiFields = this.getApiFields();
+
+        for (const k of apiFields.keys()) {
+            if (!instance[k] || (!_force && this.inBlocking(instance[k])))
+                continue;
+            const apiF = apiFields.get(k) as string;
+            sObjectMap.set(apiF, instance[k]);
+        }
+
+        return Object.fromEntries(sObjectMap);
     }
 
     static toSObject(instance: any, _force: boolean = false) {
@@ -57,8 +90,15 @@ export class Model {
         return Object.fromEntries(sObjectMap);
     }
 
+    inBlocking(key: string) {
+        const field = key as keyof typeof this;
+        const pattern = Constant.VALUE_IN_BLOCKING_PATTERN;
+        const value = this[field] as unknown as string;
+        return pattern.test(value);
+    }
+
     static inBlocking(value: string) {
-        const pattern = /^{!.+}$/;
+        const pattern = Constant.VALUE_IN_BLOCKING_PATTERN;
         return pattern.test(value);
     }
 

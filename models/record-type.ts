@@ -4,11 +4,11 @@ export class RecordType extends Model {
     name = "";
     sObjectType = "";
 
-    static getTableName() {
+    getTableName() {
         return "RecordType";
     }
 
-    static getApiFields() {
+    getApiFields() {
         const fieldMap = new Map<string, string>();
 
         fieldMap.set("id", "Id");
