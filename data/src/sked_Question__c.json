@@ -76,25 +76,6 @@
         "dataType": null
     },
     {
-        "id": "{!a2r2S00000egvrNQAQ}",
-        "question": "Ethnicity",
-        "anwser": "Hispanic\r\nNon-Hispanic\r\nOther\r\nNot Provided",
-        "desciption": null,
-        "siteId": "{!a2q2S000001zDjYQAU}",
-        "recordTypeId": "{!0122S0000006HVoQAM}",
-        "preAnwser": null,
-        "preQuestion": null,
-        "order": 7,
-        "required": true,
-        "linkId": null,
-        "showIf": null,
-        "shortQuestion": "Ethnicity",
-        "optionFormat": null,
-        "isActive": true,
-        "defaultValue": null,
-        "dataType": "Picklist"
-    },
-    {
         "id": "{!a2r2D000000tDSFQA2}",
         "question": "Do you live in a congregate living setting?",
         "anwser": "Yes\r\nNo",
@@ -266,6 +247,25 @@
         "dataType": "Text"
     },
     {
+        "id": "{!a2r2S00000egvrNQAQ}",
+        "question": "Ethnicity",
+        "anwser": "Hispanic\r\nNon-Hispanic\r\nOther\r\nNot Provided",
+        "desciption": null,
+        "siteId": "{!a2q2S000001zDjYQAU}",
+        "recordTypeId": "{!0122S0000006HVoQAM}",
+        "preAnwser": null,
+        "preQuestion": null,
+        "order": 7,
+        "required": true,
+        "linkId": null,
+        "showIf": null,
+        "shortQuestion": "Ethnicity",
+        "optionFormat": null,
+        "isActive": true,
+        "defaultValue": null,
+        "dataType": "Picklist"
+    },
+    {
         "id": "{!a2r2S00000egvrOQAQ}",
         "question": "Guardian Last Name?",
         "anwser": null,
@@ -342,25 +342,6 @@
         "dataType": "Picklist"
     },
     {
-        "id": "{!a2r2S00000egvrXQAQ}",
-        "question": "What is the name of your employer?",
-        "anwser": null,
-        "desciption": null,
-        "siteId": "{!a2q2S000001zDjYQAU}",
-        "recordTypeId": "{!0122S0000006HVoQAM}",
-        "preAnwser": null,
-        "preQuestion": null,
-        "order": 14,
-        "required": false,
-        "linkId": null,
-        "showIf": "location.address.state===NY",
-        "shortQuestion": "C401",
-        "optionFormat": null,
-        "isActive": true,
-        "defaultValue": null,
-        "dataType": "Text"
-    },
-    {
         "id": "{!a2r2S00000egvrUQAQ}",
         "question": "Are you pregnant?",
         "anwser": "Yes\r\nNo\r\nUnknown",
@@ -416,6 +397,25 @@
         "isActive": true,
         "defaultValue": null,
         "dataType": "Picklist"
+    },
+    {
+        "id": "{!a2r2S00000egvrXQAQ}",
+        "question": "What is the name of your employer?",
+        "anwser": null,
+        "desciption": null,
+        "siteId": "{!a2q2S000001zDjYQAU}",
+        "recordTypeId": "{!0122S0000006HVoQAM}",
+        "preAnwser": null,
+        "preQuestion": null,
+        "order": 14,
+        "required": false,
+        "linkId": null,
+        "showIf": "location.address.state===NY",
+        "shortQuestion": "C401",
+        "optionFormat": null,
+        "isActive": true,
+        "defaultValue": null,
+        "dataType": "Text"
     },
     {
         "id": "{!a2r2S00000egvrYQAQ}",

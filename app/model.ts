@@ -62,15 +62,19 @@ export class Model {
         return this.newInstance().getApiFields();
     }
 
-    toSObject(instance: any, _force: boolean = false) {
+    toSObject(_force: boolean = false) {
         const sObjectMap = new Map<string, unknown>();
         const apiFields = this.getApiFields();
 
         for (const k of apiFields.keys()) {
-            if (!instance[k] || (!_force && this.inBlocking(instance[k])))
+            const f = k as keyof typeof this;
+            if (
+                this[f] == undefined ||
+                (!_force && this.inBlocking(f as string))
+            )
                 continue;
             const apiF = apiFields.get(k) as string;
-            sObjectMap.set(apiF, instance[k]);
+            sObjectMap.set(apiF, this[f]);
         }
 
         return Object.fromEntries(sObjectMap);
@@ -81,7 +85,10 @@ export class Model {
         const apiFields = this.getApiFields();
 
         for (const k of apiFields.keys()) {
-            if (!instance[k] || (!_force && this.inBlocking(instance[k])))
+            if (
+                instance[k] == undefined ||
+                (!_force && this.inBlocking(instance[k]))
+            )
                 continue;
             const apiF = apiFields.get(k) as string;
             sObjectMap.set(apiF, instance[k]);

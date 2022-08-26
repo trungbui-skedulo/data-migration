@@ -11,11 +11,11 @@ dotenv.config({
 
 const getQuestions = () => {
     const questions: models.Question[] = JSON.parse(
-        fs.readFileSync("./data/src/questions.json", {
+        fs.readFileSync(`./data/src/${models.Question.getTableName()}.json`, {
             encoding: "utf8",
             flag: "r",
         })
-    ).map((r: unknown) =>
+    ).map((r: models.Question) =>
         models.Question.fromSObject(models.Question.toSObject(r, true))
     );
 
@@ -28,7 +28,7 @@ const getRecordTypeIdsMap = () => {
             encoding: "utf8",
             flag: "r",
         })
-    ).map((r: unknown) =>
+    ).map((r: models.RecordType) =>
         models.RecordType.fromSObject(models.RecordType.toSObject(r, true))
     );
 
@@ -56,12 +56,11 @@ const insertQuestion = (q: app.Model) => {
     // return new Promise<string>((res, rej) => {
     //     setTimeout(() => {
     //         res(Date.now().toString());
-    //     }, 1000);
+    //     }, 100);
     // });
-    return app.SfApi.insert(
-        models.Question.getTableName(),
-        models.Question.toSObject(q)
-    ).then((r) => r.id as string);
+    return app.SfApi.insert(q.getTableName(), q.toSObject()).then(
+        (r) => r.id as string
+    );
 };
 
 const main = async () => {
@@ -69,7 +68,7 @@ const main = async () => {
 
     const idsMap = await getRecordTypeIdsMap();
 
-    idsMap.set("a2q2S000001zDjYQAU", "a2q2g000000DGkgAAG");
+    idsMap.set("a2q2S000001zDjYQAU", "a2q2h000000G3arAAC");
 
     handlers.queueMigration.migrate({
         queue,

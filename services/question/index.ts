@@ -15,5 +15,5 @@ export const getBySiteSettingName = (name: string) => {
                 .blockField("recordTypeId")
                 .blockField("preQuestion")
         );
-    });
+    }) as Promise<models.Question[]>;
 };
