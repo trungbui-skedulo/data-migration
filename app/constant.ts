@@ -1,1 +1,1 @@
-export const VALUE_IN_BLOCKING_PATTERN = /^{!.+}$/;
+export const VALUE_IN_LOCKING_PATTERN = /^{!.+}$/;

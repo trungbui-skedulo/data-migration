@@ -70,7 +70,7 @@ export class Model {
             const f = k as keyof typeof this;
             if (
                 this[f] == undefined ||
-                (!_force && this.inBlocking(f as string))
+                (!_force && this.inLocking(f as string))
             )
                 continue;
             const apiF = apiFields.get(k) as string;
@@ -87,7 +87,7 @@ export class Model {
         for (const k of apiFields.keys()) {
             if (
                 instance[k] == undefined ||
-                (!_force && this.inBlocking(instance[k]))
+                (!_force && this.inLocking(instance[k]))
             )
                 continue;
             const apiF = apiFields.get(k) as string;
@@ -97,24 +97,32 @@ export class Model {
         return Object.fromEntries(sObjectMap);
     }
 
-    inBlocking(key: string) {
+    inLocking(key: string) {
         const field = key as keyof typeof this;
-        const pattern = Constant.VALUE_IN_BLOCKING_PATTERN;
+        const pattern = Constant.VALUE_IN_LOCKING_PATTERN;
         const value = this[field] as unknown as string;
         return pattern.test(value);
     }
 
-    static inBlocking(value: string) {
-        const pattern = Constant.VALUE_IN_BLOCKING_PATTERN;
+    static inLocking(value: string) {
+        const pattern = Constant.VALUE_IN_LOCKING_PATTERN;
         return pattern.test(value);
     }
 
-    blockField(key: string) {
+    lockField(key: string) {
         const field = key as keyof this;
 
-        if (!this[field]) return this;
+        if (this[field] == undefined) return this;
 
         this[field] = `{!${this[field]}}` as any;
+
+        return this;
+    }
+
+    unlockField(key: string) {
+        const field = key as keyof this;
+        const value = this[field] as unknown as string;
+        this[field] = value.replace("{!", "").replace("}", "") as any;
 
         return this;
     }

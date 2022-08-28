@@ -1,19 +1,49 @@
 import { Model } from "../../app";
 import { createQueue, createIdsMap } from "./create";
 
-type MigrateParams = {
+export type NewIdResult = {
+    preId: string;
+    newId: string;
+};
+
+export type MigrateParams = {
     queue: ReturnType<typeof createQueue>;
     idsMap: ReturnType<typeof createIdsMap>;
-    createNewIdFn: (mode: Model) => Promise<string>;
+    createNewIdsFn: (mode: Model[]) => Promise<NewIdResult[]>;
 };
 
 export const migrate = async ({
     queue,
     idsMap,
-    createNewIdFn,
+    createNewIdsFn,
 }: MigrateParams) => {
-    let failedCount = 0;
-    let srcId = "";
+    while (queue.length > 0) {
+        let { invalidQueue, validQueue } = validateQueue(queue, idsMap);
+
+        if (validQueue.length == 0) {
+            console.log("Migrated: failed");
+            break;
+        }
+
+        let results = await createNewIdsFn(validQueue);
+
+        for (const r of results) {
+            console.log(`Migrated: ${r.preId} ====> ${r.newId}`);
+            idsMap.set(r.preId, r.newId);
+        }
+
+        queue = invalidQueue;
+    }
+
+    return idsMap;
+};
+
+const validateQueue = (
+    queue: ReturnType<typeof createQueue>,
+    idsMap: ReturnType<typeof createIdsMap>
+) => {
+    let invalidQueue = createQueue();
+    let validQueue = createQueue();
 
     while (queue.length > 0) {
         let failed = false;
@@ -23,7 +53,7 @@ export const migrate = async ({
             const f = k as keyof typeof q;
             if (f == "id") continue;
             if (typeof q[f] !== "string") continue;
-            if (!Model.inBlocking(q[f] as unknown as string)) continue;
+            if (!Model.inLocking(q[f] as unknown as string)) continue;
 
             let idSrc = q[f] as unknown as string;
             idSrc = idSrc.replace("{!", "").replace("}", "");
@@ -38,25 +68,12 @@ export const migrate = async ({
         }
 
         if (!failed) {
-            const id = await createNewIdFn(q);
-
-            failedCount = 0;
-            srcId = q.id.replace("{!", "").replace("}", "");
-            q.id = id;
-            idsMap.set(srcId, q.id);
-
-            console.log(`Migrated: ${srcId} ==> ${q.id}`);
+            validQueue.push(q);
             continue;
         }
 
-        failedCount += 1;
-        queue.push(q);
-
-        if (failedCount >= queue.length) {
-            console.log("======= Fail =====");
-            break;
-        }
+        invalidQueue.push(q);
     }
 
-    return idsMap;
+    return { invalidQueue, validQueue };
 };

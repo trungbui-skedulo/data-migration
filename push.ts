@@ -4,6 +4,8 @@ import * as app from "./app";
 import dotenv from "dotenv";
 import * as services from "./services";
 import fs from "fs";
+import { NewIdResult } from "./handlers/queue-migration";
+import { MassInsertedResult } from "./app/sf-api";
 
 dotenv.config({
     path: "./.env.dst",
@@ -52,15 +54,52 @@ const getRecordTypeIdsMap = () => {
         });
 };
 
-const insertQuestion = (q: app.Model) => {
-    // return new Promise<string>((res, rej) => {
+const insertRecords = (qs: app.Model[]) => {
+    // return new Promise<NewIdResult[]>((res, rej) => {
     //     setTimeout(() => {
-    //         res(Date.now().toString());
-    //     }, 100);
+    //         res(
+    //             qs.map((q) => ({
+    //                 preId: q.unlockField("id").id,
+    //                 newId: Date.now().toString(),
+    //             }))
+    //         );
+    //     }, 1000);
     // });
-    return app.SfApi.insert(q.getTableName(), q.toSObject()).then(
-        (r) => r.id as string
-    );
+
+    const sobjsMapByName = new Map<string, unknown[]>();
+    const executions: ReturnType<typeof app.SfApi.massInsert>[] = [];
+    qs.forEach((q) => {
+        const sobjs: Array<unknown> =
+            sobjsMapByName.get(q.getTableName()) ?? [];
+        const sobj = q.toSObject();
+
+        sobj["attributes"] = {
+            type: q.getTableName(),
+            referenceId: q.unlockField("id").id,
+        };
+        sobjs.push(sobj);
+        sobjsMapByName.set(q.getTableName(), sobjs);
+    });
+
+    for (const oName of sobjsMapByName.keys()) {
+        const recs = sobjsMapByName.get(oName);
+        executions.push(app.SfApi.massInsert(oName, recs));
+    }
+
+    return Promise.all(executions).then((responses) => {
+        const successResults: NewIdResult[] = [];
+        responses.forEach((response) => {
+            const successResponse = response as MassInsertedResult;
+            if (!successResponse) return [];
+            successResponse.results.forEach((rec) => {
+                successResults.push({ preId: rec.referenceId, newId: rec.id });
+            });
+        });
+
+        return successResults;
+    });
+
+    // return app.SfApi.massInsert(q.)
 };
 
 const main = async () => {
@@ -73,7 +112,7 @@ const main = async () => {
     handlers.queueMigration.migrate({
         queue,
         idsMap,
-        createNewIdFn: insertQuestion,
+        createNewIdsFn: insertRecords,
     });
 };
 

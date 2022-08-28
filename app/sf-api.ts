@@ -45,3 +45,30 @@ export const insert = (sobjectName: string, body: any) => {
             console.log(error.response.data);
         });
 };
+
+export type MassInsertedResult = {
+    hasErrors: boolean;
+    results: {
+        referenceId: string;
+        id: string;
+        errors: any[];
+    }[];
+};
+
+export const massInsert: (
+    sobjectName: string,
+    body: any
+) => Promise<MassInsertedResult | void> = (sobjectName, body) => {
+    console.log(`Inserted: ${sobjectName}`);
+
+    return getApiInstance()
+        .post(`/services/data/v55.0/composite/tree/${sobjectName}`, {
+            records: body,
+        })
+        .then((res) => {
+            return res.data as MassInsertedResult;
+        })
+        .catch((error) => {
+            console.log(JSON.stringify(error.response.data));
+        });
+};
