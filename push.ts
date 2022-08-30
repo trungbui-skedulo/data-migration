@@ -24,6 +24,61 @@ const getQuestions = () => {
     return questions;
 };
 
+const getObjectMappings = () => {
+    const ObjectMappings: models.ObjectMapping[] = JSON.parse(
+        fs.readFileSync(
+            `./data/src/${models.ObjectMapping.getTableName()}.json`,
+            {
+                encoding: "utf8",
+                flag: "r",
+            }
+        )
+    ).map((r: models.ObjectMapping) =>
+        models.ObjectMapping.fromSObject(
+            models.ObjectMapping.toSObject(r, true)
+        )
+    );
+
+    return ObjectMappings;
+};
+
+const getObjectFieldMappings = () => {
+    const ObjectFieldMappings: models.ObjectFieldMapping[] = JSON.parse(
+        fs.readFileSync(
+            `./data/src/${models.ObjectFieldMapping.getTableName()}.json`,
+            {
+                encoding: "utf8",
+                flag: "r",
+            }
+        )
+    ).map((r: models.ObjectFieldMapping) =>
+        models.ObjectFieldMapping.fromSObject(
+            models.ObjectFieldMapping.toSObject(r, true)
+        )
+    );
+
+    return ObjectFieldMappings;
+};
+
+const getObjectMappingDictionarys = () => {
+    const ObjectMappingDictionarys: models.ObjectMappingDictionary[] =
+        JSON.parse(
+            fs.readFileSync(
+                `./data/src/${models.ObjectMappingDictionary.getTableName()}.json`,
+                {
+                    encoding: "utf8",
+                    flag: "r",
+                }
+            )
+        ).map((r: models.ObjectMappingDictionary) =>
+            models.ObjectMappingDictionary.fromSObject(
+                models.ObjectMappingDictionary.toSObject(r, true)
+            )
+        );
+
+    return ObjectMappingDictionarys;
+};
+
 const getRecordTypeIdsMap = () => {
     const recordTypes: models.RecordType[] = JSON.parse(
         fs.readFileSync("./data/src/record-types.json", {
@@ -63,16 +118,14 @@ const insertRecords = (qs: app.Model[]) => {
     //                 newId: Date.now().toString(),
     //             }))
     //         );
-    //     }, 1000);
+    //     }, 1500);
     // });
-
     const sobjsMapByName = new Map<string, unknown[]>();
     const executions: ReturnType<typeof app.SfApi.massInsert>[] = [];
     qs.forEach((q) => {
         const sobjs: Array<unknown> =
             sobjsMapByName.get(q.getTableName()) ?? [];
         const sobj = q.toSObject();
-
         sobj["attributes"] = {
             type: q.getTableName(),
             referenceId: q.unlockField("id").id,
@@ -80,12 +133,10 @@ const insertRecords = (qs: app.Model[]) => {
         sobjs.push(sobj);
         sobjsMapByName.set(q.getTableName(), sobjs);
     });
-
     for (const oName of sobjsMapByName.keys()) {
         const recs = sobjsMapByName.get(oName);
         executions.push(app.SfApi.massInsert(oName, recs));
     }
-
     return Promise.all(executions).then((responses) => {
         const successResults: NewIdResult[] = [];
         responses.forEach((response) => {
@@ -95,15 +146,16 @@ const insertRecords = (qs: app.Model[]) => {
                 successResults.push({ preId: rec.referenceId, newId: rec.id });
             });
         });
-
         return successResults;
     });
-
-    // return app.SfApi.massInsert(q.)
 };
 
 const main = async () => {
-    const queue = getQuestions();
+    let queue: app.Model[] = [];
+    queue = [...queue, ...getQuestions()];
+    queue = [...queue, ...getObjectMappings()];
+    queue = [...queue, ...getObjectFieldMappings()];
+    queue = [...queue, ...getObjectMappingDictionarys()];
 
     const idsMap = await getRecordTypeIdsMap();
 
