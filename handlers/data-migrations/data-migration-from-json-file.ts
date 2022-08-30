@@ -13,11 +13,15 @@ export class DataMigrationFromJsonFile
     implements DataMigrationFromJsonFileInterface
 {
     getTableName(): string {
-        throw new Error("Method not implemented.");
+        throw new Error(
+            `${this.constructor.name} Migration From Json File did not implemented getTableName method.`
+        );
     }
 
     mapRecord(r: unknown): Model {
-        throw new Error("Method not implemented.");
+        throw new Error(
+            `${this.constructor.name} Migration From Json File did not implemented mapRecord method.`
+        );
     }
 
     idsMap(): Map<string, string> {

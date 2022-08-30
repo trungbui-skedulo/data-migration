@@ -16,10 +16,14 @@ interface DataMigrationInterface {
 
 export class DataMigration implements DataMigrationInterface {
     records(): app.Model[] {
-        throw new Error("Method not implemented.");
+        throw new Error(
+            `${this.constructor.name} Migration did not implemented records method.`
+        );
     }
     idsMap(): Map<string, string> {
-        throw new Error("Method not implemented.");
+        throw new Error(
+            `${this.constructor.name} Migration did not implemented idsMap method.`
+        );
     }
     static newInstance() {
         return new this();
