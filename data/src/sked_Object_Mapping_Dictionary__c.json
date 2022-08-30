@@ -1,0 +1,74 @@
+[
+    {
+        "id": "{!a2m2S000002wgqIQAQ}",
+        "key": "Pending Allocation",
+        "mappingToObject": "{!a2n2S000000KMeHQAW}",
+        "value": "New"
+    },
+    {
+        "id": "{!a2m2S000002wgqJQAQ}",
+        "key": "Complete",
+        "mappingToObject": "{!a2n2S000000KMeHQAW}",
+        "value": "Closed"
+    },
+    {
+        "id": "{!a2m2S000002wgqKQAQ}",
+        "key": "Cancelled",
+        "mappingToObject": "{!a2n2S000000KMeHQAW}",
+        "value": "Patient Cancelled"
+    },
+    {
+        "id": "{!a2m2S000003h7iBQAQ}",
+        "key": "Queued",
+        "mappingToObject": "{!a2n2S000000VNK3QAO}",
+        "value": "New"
+    },
+    {
+        "id": "{!a2m2S000003h7iCQAQ}",
+        "key": "Pending Allocation",
+        "mappingToObject": "{!a2n2S000000VNK3QAO}",
+        "value": "New"
+    },
+    {
+        "id": "{!a2m2S000003h7iDQAQ}",
+        "key": "Cancelled",
+        "mappingToObject": "{!a2n2S000000VNK3QAO}",
+        "value": "Patient Cancelled"
+    },
+    {
+        "id": "{!a2m2S000003h7iEQAQ}",
+        "key": "Complete",
+        "mappingToObject": "{!a2n2S000000VNK3QAO}",
+        "value": "Closed"
+    },
+    {
+        "id": "{!a2m2S0000055yruQAA}",
+        "key": "Pending Allocation",
+        "mappingToObject": "{!a2n2S000000tAIkQAM}",
+        "value": "New"
+    },
+    {
+        "id": "{!a2m2S0000055yrvQAA}",
+        "key": "Complete",
+        "mappingToObject": "{!a2n2S000000tAIkQAM}",
+        "value": "Closed"
+    },
+    {
+        "id": "{!a2m2S0000055yrwQAA}",
+        "key": "Cancelled",
+        "mappingToObject": "{!a2n2S000000tAIkQAM}",
+        "value": "Patient Cancelled"
+    },
+    {
+        "id": "{!a2m2S0000057EYgQAM}",
+        "key": "Dispatched",
+        "mappingToObject": "{!a2n2S000000tAIkQAM}",
+        "value": "New"
+    },
+    {
+        "id": "{!a2m2S0000057EYlQAM}",
+        "key": "Pending Dispatch",
+        "mappingToObject": "{!a2n2S000000tAIkQAM}",
+        "value": "New"
+    }
+]

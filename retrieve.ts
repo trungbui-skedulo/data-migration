@@ -11,11 +11,16 @@ const questionCollector =
 
 const objectMappingCollector =
     handlers.dataCollectors.ObjectMapping.newInstance();
+
 const objectFieldMappingCollector =
     handlers.dataCollectors.ObjectFieldMapping.newInstance();
+
+const objectMappingDictionary =
+    handlers.dataCollectors.ObjectMappingDictionary.newInstance();
 
 handlers.dataCollectors.CollectorQueue.newInstance()
     .pushCollector(questionCollector)
     .pushCollector(objectMappingCollector)
     .pushCollector(objectFieldMappingCollector)
+    .pushCollector(objectMappingDictionary)
     .execute();
