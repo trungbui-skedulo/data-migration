@@ -107,7 +107,7 @@ const main = async () => {
 
     const idsMap = await getRecordTypeIdsMap();
 
-    idsMap.set("a2q2S000001zDjYQAU", "a2q2h000000G3arAAC");
+    idsMap.set("a2q2S000001zDjYQAU", "a2q2g000000DGkgAAG");
 
     handlers.queueMigration.migrate({
         queue,

@@ -1,0 +1,14 @@
+import * as models from "../../models";
+import * as app from "../../app";
+
+export const getAll = () => {
+    const q = models.ObjectFieldMapping.buildQuery().query();
+
+    return app.SfApi.query(q).then((data) => {
+        return data.records.map((r: unknown) =>
+            models.ObjectFieldMapping.fromSObject(r)
+                .lockField("id")
+                .lockField("objectMapping")
+        );
+    }) as Promise<models.ObjectFieldMapping[]>;
+};

@@ -9,6 +9,13 @@ dotenv.config({
 const questionCollector =
     handlers.dataCollectors.QuestionCollector.newInstance();
 
+const objectMappingCollector =
+    handlers.dataCollectors.ObjectMapping.newInstance();
+const objectFieldMappingCollector =
+    handlers.dataCollectors.ObjectFieldMapping.newInstance();
+
 handlers.dataCollectors.CollectorQueue.newInstance()
     .pushCollector(questionCollector)
+    .pushCollector(objectMappingCollector)
+    .pushCollector(objectFieldMappingCollector)
     .execute();
