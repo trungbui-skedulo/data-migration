@@ -57,12 +57,18 @@ const insertRecords = (qs: app.Model[]) =>
 const questionMigration = handlers.dataMigrations.Question.newInstance();
 const dtcSiteSetting = handlers.dataMigrations.DTCSiteSetting.newInstance();
 const recordType = handlers.dataMigrations.RecordType.newInstance();
+const objectMappingDictionary =
+    handlers.dataMigrations.ObjectMappingDictionary.newInstance();
+const objectFieldMapping =
+    handlers.dataMigrations.ObjectFieldMapping.newInstance();
 const objectMappingigration =
     handlers.dataMigrations.ObjectMapping.newInstance();
 
 handlers.dataMigrations.MigrationQueue.newInstance()
     .pushMigration(questionMigration)
     .pushMigration(objectMappingigration)
+    .pushMigration(objectMappingDictionary)
+    .pushMigration(objectFieldMapping)
     .pushMigration(dtcSiteSetting)
     .pushMigration(recordType)
     .createNewIdsFn(insertRecords)
