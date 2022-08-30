@@ -1,2 +1,2 @@
-export * as queueMigration from "./queue-migration";
+export * as dataMigrations from "./data-migrations";
 export * as dataCollectors from "./data-collectors";
